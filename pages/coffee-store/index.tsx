@@ -7,7 +7,7 @@ const CoffeeStore = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>All Coffee Stores</h1>
-      <Link href="/" prefetch className={styles.button}>
+      <Link href="/" className={styles.button}>
         Back to home
       </Link>
 
