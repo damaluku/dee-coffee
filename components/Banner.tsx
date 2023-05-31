@@ -14,10 +14,7 @@ const Banner = ({ buttonText, handleBannerButtonClick }: Props) => {
           <span className={styles.title1}>Dee</span>
           <span className={styles.title2}>Coffee</span>
         </h1>
-        <p className={styles.subtitle}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Voluptatibus, maiores quas. Voluptatibus aliquid commodi quibusdam?
-        </p>
+        <p className={styles.subtitle}>Discover your local coffee shops!.</p>
         <button className={styles.button} onClick={handleBannerButtonClick}>
           {buttonText}
         </button>
@@ -29,6 +26,7 @@ const Banner = ({ buttonText, handleBannerButtonClick }: Props) => {
           width={350}
           height={350}
           alt="banner image"
+          priority
         />
       </div>
     </div>
