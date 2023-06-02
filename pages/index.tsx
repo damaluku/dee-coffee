@@ -7,13 +7,26 @@ import styles from "@/styles/Home.module.css";
 
 import Banner from "@/components/Banner";
 import CoffeeCard from "@/components/CoffeeCard";
+import Heading from "@/components/Heading";
+
+import coffeeStore from "@/data/coffee-stores.json";
 
 const inter = Inter({ subsets: ["latin"] });
+
+type CoffeeStoreTypes = {
+  id: number;
+  name: string;
+  imgUrl: string;
+  websiteUrl: string;
+  address: string;
+  neighbourhood: string;
+};
 
 export default function Home() {
   const handleBannerButtonClick = async () => {
     console.log("handleBannerButtonClick");
   };
+
   return (
     <>
       <Head>
@@ -27,6 +40,21 @@ export default function Home() {
           buttonText="View stores nearby"
           handleBannerButtonClick={handleBannerButtonClick}
         />
+
+        <section className={styles.section}>
+          <Heading heading="Coffee stores near you." />
+
+          <div className={styles.subContainer}>
+            {coffeeStore.map((store: CoffeeStoreTypes) => (
+              <CoffeeCard
+                key={store.id}
+                href={store.id}
+                imageUrl={store.imgUrl}
+                title={store.name}
+              />
+            ))}
+          </div>
+        </section>
       </main>
     </>
   );

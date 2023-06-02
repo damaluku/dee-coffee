@@ -12,9 +12,7 @@ const CoffeeStore = () => {
       </Link>
 
       <div className={styles.subContainer}>
-        <div className={styles.cardContainer}>
-          <CoffeeCard />
-        </div>
+        <CoffeeCard href="" imageUrl="" title="" />
       </div>
     </div>
   );

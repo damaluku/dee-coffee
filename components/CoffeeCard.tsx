@@ -1,16 +1,29 @@
 import Image from "next/image";
 import React from "react";
 import styles from "@/styles/CoffeeCard.module.css";
+import Link from "next/link";
 
-const CoffeeCard = () => {
+type Props = {
+  href: number;
+  title: string;
+  imageUrl: string;
+};
+
+const CoffeeCard: React.FC<Props> = ({ href, imageUrl, title }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.imageContainer}>
-        <Image src="/static/tiger-head.svg" fill alt="banner image" />
-      </div>
-      <div className={styles.content}>
-        <h2>Coffee Card</h2>
-      </div>
+    <div className={`${styles.container} glass`}>
+      <Link href={`/coffee-stores/${href}`} scroll={false}>
+        <div className={styles.imageContainer}>
+          <Image
+            src={imageUrl.length ? imageUrl : "/static/tiger-head.svg"}
+            fill
+            alt={title}
+          />
+        </div>
+        <div className={styles.content}>
+          <h2>{title}</h2>
+        </div>
+      </Link>
     </div>
   );
 };
