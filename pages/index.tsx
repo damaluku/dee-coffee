@@ -9,11 +9,14 @@ import Banner from "@/components/Banner";
 import CoffeeCard from "@/components/CoffeeCard";
 import Heading from "@/components/Heading";
 
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+
 import coffeeStore from "@/data/coffee-stores.json";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
-type CoffeeStoreTypes = {
+export type CoffeeStoreTypes = {
   id: number;
   name: string;
   imgUrl: string;
@@ -22,7 +25,9 @@ type CoffeeStoreTypes = {
   neighbourhood: string;
 };
 
-export default function Home() {
+export default function Home({
+  stores,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const handleBannerButtonClick = async () => {
     console.log("handleBannerButtonClick");
   };
@@ -41,21 +46,62 @@ export default function Home() {
           handleBannerButtonClick={handleBannerButtonClick}
         />
 
-        <section className={styles.section}>
-          <Heading heading="Coffee stores near you." />
+        {stores.length > 0 ? (
+          <section className={styles.section}>
+            <Link href="/coffee-stores">
+              <Heading heading="Coffee stores near you" />
+            </Link>
 
-          <div className={styles.subContainer}>
-            {coffeeStore.map((store: CoffeeStoreTypes) => (
-              <CoffeeCard
-                key={store.id}
-                href={store.id}
-                imageUrl={store.imgUrl}
-                title={store.name}
-              />
-            ))}
+            <div className={styles.subContainer}>
+              {stores.map((store: CoffeeStoreTypes) => (
+                <CoffeeCard
+                  key={store.id}
+                  href={store.id}
+                  imageUrl={store.imgUrl}
+                  title={store.name}
+                />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <div className={styles.noStores}>
+            <h3>No stores found</h3>
           </div>
-        </section>
+        )}
+
+        {stores.length > 0 && (
+          <section className={styles.section}>
+            <Heading heading="Toronto Coffee stores" />
+
+            <div className={styles.subContainer}>
+              {stores.map((store: CoffeeStoreTypes) => (
+                <CoffeeCard
+                  key={store.id}
+                  href={store.id}
+                  imageUrl={store.imgUrl}
+                  title={store.name}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const stores = coffeeStore;
+
+  if (!stores) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      stores,
+    },
+  };
+};

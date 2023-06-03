@@ -12,7 +12,7 @@ type Props = {
 const CoffeeCard: React.FC<Props> = ({ href, imageUrl, title }) => {
   return (
     <div className={`${styles.container} glass`}>
-      <Link href={`/coffee-stores/${href}`} scroll={false}>
+      <Link href={`/coffee-stores/${href}`}>
         <div className={styles.imageContainer}>
           <Image
             src={imageUrl.length ? imageUrl : "/static/tiger-head.svg"}
