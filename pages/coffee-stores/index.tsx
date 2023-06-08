@@ -6,6 +6,7 @@ import CoffeeCard from "@/components/CoffeeCard";
 import coffeeStore from "@/data/coffee-stores.json";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { CoffeeStoreTypes } from "..";
+import { fetchCoffeeStores } from "@/lib/coffee-stores";
 
 const CoffeeStores = ({
   stores,
@@ -20,9 +21,9 @@ const CoffeeStores = ({
       <div className={styles.subContainer}>
         {stores.map((store: CoffeeStoreTypes) => (
           <CoffeeCard
-            key={store.id}
-            href={store.id}
-            imageUrl={store.imgUrl}
+            key={store.fsq_id}
+            href={store.fsq_id}
+            imageUrl={store.imgUrl || "/static/tiger-head.svg"}
             title={store.name}
           />
         ))}
@@ -34,7 +35,7 @@ const CoffeeStores = ({
 export default CoffeeStores;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const stores = coffeeStore;
+  const stores = await fetchCoffeeStores();
 
   if (!stores) {
     return {

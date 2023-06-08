@@ -25,6 +25,9 @@
   width: 100%;
   font-size: 1.5rem;
   color: var(--color-dark);
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
 }
 .section1 p {
   font-weight: 700;
@@ -77,6 +80,10 @@
 
 .infoContainer p:nth-child(2) {
   margin: 1rem 0;
+}
+
+.infoContainer p:nth-child(3) span {
+  font-weight: bold;
 }
 
 .infoContainer button {

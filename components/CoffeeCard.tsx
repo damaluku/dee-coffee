@@ -4,7 +4,7 @@ import styles from "@/styles/CoffeeCard.module.css";
 import Link from "next/link";
 
 type Props = {
-  href: number;
+  href: number | string;
   title: string;
   imageUrl: string;
 };

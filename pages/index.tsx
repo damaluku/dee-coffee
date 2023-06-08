@@ -13,16 +13,43 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import coffeeStore from "@/data/coffee-stores.json";
 import Link from "next/link";
+import { fetchCoffeeStores } from "@/lib/coffee-stores";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export type CoffeeStoreTypes = {
+interface Categories {
   id: number;
   name: string;
-  imgUrl: string;
-  websiteUrl: string;
-  address: string;
-  neighbourhood: string;
+  icon: {
+    prefix: string;
+    suffix: string;
+  };
+}
+
+export type CoffeeStoreTypes = {
+  imgUrl: string | null;
+  fsq_id: string;
+  categories: Categories;
+  chains: [];
+  distance: number;
+  geocodes: {
+    main: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  link: string;
+  location: {
+    address: string;
+    country: string;
+    cross_street: string;
+    formatted_address: string;
+    locality: string;
+    region: string;
+  };
+  name: string;
+  related_places: any;
+  timezone: string;
 };
 
 export default function Home({
@@ -46,6 +73,8 @@ export default function Home({
           handleBannerButtonClick={handleBannerButtonClick}
         />
 
+        <div></div>
+
         {stores.length > 0 ? (
           <section className={styles.section}>
             <Link href="/coffee-stores">
@@ -53,11 +82,11 @@ export default function Home({
             </Link>
 
             <div className={styles.subContainer}>
-              {stores.map((store: CoffeeStoreTypes) => (
+              {stores.slice(0, 7).map((store: CoffeeStoreTypes) => (
                 <CoffeeCard
-                  key={store.id}
-                  href={store.id}
-                  imageUrl={store.imgUrl}
+                  key={store.fsq_id}
+                  href={store.fsq_id}
+                  imageUrl={store.imgUrl || "/static/tiger-head.svg"}
                   title={store.name}
                 />
               ))}
@@ -74,11 +103,11 @@ export default function Home({
             <Heading heading="Toronto Coffee stores" />
 
             <div className={styles.subContainer}>
-              {stores.map((store: CoffeeStoreTypes) => (
+              {stores.slice(0, 5).map((store: CoffeeStoreTypes) => (
                 <CoffeeCard
-                  key={store.id}
-                  href={store.id}
-                  imageUrl={store.imgUrl}
+                  key={store.fsq_id}
+                  href={store.fsq_id}
+                  imageUrl={store.imgUrl || "/static/tiger-head.svg"}
                   title={store.name}
                 />
               ))}
@@ -91,7 +120,7 @@ export default function Home({
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const stores = coffeeStore;
+  const stores = await fetchCoffeeStores();
 
   if (!stores) {
     return {
