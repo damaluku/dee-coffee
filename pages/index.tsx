@@ -86,7 +86,7 @@ export default function Home({
                 <CoffeeCard
                   key={store.fsq_id}
                   href={store.fsq_id}
-                  imageUrl={store.imgUrl || "/static/tiger-head.svg"}
+                  imageUrl={store.imgUrl || "/static/mesh-gradient.png"}
                   title={store.name}
                 />
               ))}
@@ -107,7 +107,7 @@ export default function Home({
                 <CoffeeCard
                   key={store.fsq_id}
                   href={store.fsq_id}
-                  imageUrl={store.imgUrl || "/static/tiger-head.svg"}
+                  imageUrl={store.imgUrl || "/static/mesh-gradient.png"}
                   title={store.name}
                 />
               ))}

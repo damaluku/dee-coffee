@@ -89,9 +89,10 @@ const CoffeeStoreDetails = ({
         <section className={styles.section2}>
           <div className={styles.imageContainer}>
             <Image
-              src={store.imgUrl || "/static/tiger-head.svg"}
+              src={store.imgUrl || "/static/mesh-gradient.png"}
               fill
               alt={name}
+              sizes="(max-width: 768px) 450px, (max-width: 1200px) 450px, 450px"
             />
           </div>
 

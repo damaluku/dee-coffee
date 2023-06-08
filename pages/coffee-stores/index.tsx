@@ -23,7 +23,7 @@ const CoffeeStores = ({
           <CoffeeCard
             key={store.fsq_id}
             href={store.fsq_id}
-            imageUrl={store.imgUrl || "/static/tiger-head.svg"}
+            imageUrl={store.imgUrl || "/static/mesh-gradient.png"}
             title={store.name}
           />
         ))}
