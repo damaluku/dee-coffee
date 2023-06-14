@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
+
 import styles from "@/styles/Home.module.css";
 
 import Banner from "@/components/Banner";
@@ -11,11 +10,10 @@ import Heading from "@/components/Heading";
 
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 
-import coffeeStore from "@/data/coffee-stores.json";
 import Link from "next/link";
 import { fetchCoffeeStores } from "@/lib/coffee-stores";
-
-const inter = Inter({ subsets: ["latin"] });
+import useTrackLocation from "@/hooks/use-track-location";
+import { ACTION_TYPES, useStoreContext } from "@/store/context";
 
 interface Categories {
   id: number;
@@ -47,16 +45,56 @@ export type CoffeeStoreTypes = {
     locality: string;
     region: string;
   };
-  name: string;
   related_places: any;
   timezone: string;
+  id: number;
+  name: string;
+  websiteUrl: string;
+  address: string;
+  neighbourhood: string;
 };
 
 export default function Home({
   stores,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const {
+    handleTrackLocation,
+    // latlong,
+    locationErrorMessage,
+    isFindingLocation,
+  } = useTrackLocation();
+
+  const { dispatch, state } = useStoreContext();
+
+  const { latlong, coffeeStores } = state;
+
+  // const [coffeeStores, setCoffeeStores] = useState<CoffeeStoreTypes[]>([]);
+  const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+
+  const handleUpdateLocation = async () => {
+    try {
+      const stores = await fetchCoffeeStores(latlong);
+
+      dispatch({
+        type: ACTION_TYPES.SET_COFFEE_STORES,
+        payload: {
+          coffeeStores: stores,
+        },
+      });
+    } catch (error: any) {
+      console.log(error);
+      setCoffeeStoresError(error?.message ? error?.message : error);
+    }
+  };
+
+  useEffect(() => {
+    if (latlong) {
+      handleUpdateLocation();
+    }
+  }, [latlong]);
+
   const handleBannerButtonClick = async () => {
-    console.log("handleBannerButtonClick");
+    handleTrackLocation();
   };
 
   return (
@@ -69,20 +107,28 @@ export default function Home({
       </Head>
       <main className={styles.main}>
         <Banner
-          buttonText="View stores nearby"
+          buttonText={isFindingLocation ? "Locating..." : "View stores nearby"}
           handleBannerButtonClick={handleBannerButtonClick}
         />
 
-        <div></div>
+        <div>
+          {locationErrorMessage && (
+            <p>Something went wrong: {locationErrorMessage}</p>
+          )}
+        </div>
 
-        {stores.length > 0 ? (
+        <div>
+          {coffeeStoresError && (
+            <p>Something went wrong: {coffeeStoresError}</p>
+          )}
+        </div>
+
+        {coffeeStores?.length > 0 ? (
           <section className={styles.section}>
-            <Link href="/coffee-stores">
-              <Heading heading="Coffee stores near you" />
-            </Link>
+            <Heading heading="Coffee stores near me" />
 
             <div className={styles.subContainer}>
-              {stores.slice(0, 7).map((store: CoffeeStoreTypes) => (
+              {coffeeStores.slice(0, 7).map((store: CoffeeStoreTypes) => (
                 <CoffeeCard
                   key={store.fsq_id}
                   href={store.fsq_id}
@@ -94,13 +140,15 @@ export default function Home({
           </section>
         ) : (
           <div className={styles.noStores}>
-            <h3>No stores found</h3>
+            <h3>No stores</h3>
           </div>
         )}
 
         {stores.length > 0 && (
           <section className={styles.section}>
-            <Heading heading="Toronto Coffee stores" />
+            <Link href="/coffee-stores">
+              <Heading heading="Abuja Coffee stores" />
+            </Link>
 
             <div className={styles.subContainer}>
               {stores.slice(0, 5).map((store: CoffeeStoreTypes) => (

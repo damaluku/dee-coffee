@@ -3,7 +3,6 @@ import React from "react";
 import styles from "@/styles/CoffeeShops.module.css";
 import CoffeeCard from "@/components/CoffeeCard";
 
-import coffeeStore from "@/data/coffee-stores.json";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { CoffeeStoreTypes } from "..";
 import { fetchCoffeeStores } from "@/lib/coffee-stores";

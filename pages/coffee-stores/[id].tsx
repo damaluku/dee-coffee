@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 import styles from "@/styles/CoffeeShopDetails.module.css";
 
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-
-import coffeeStores from "@/data/coffee-stores.json";
 
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -17,6 +15,8 @@ import { BiArrowBack } from "react-icons/bi";
 
 import { CoffeeStoreTypes } from "..";
 import { fetchCoffeeStores } from "@/lib/coffee-stores";
+import { useStoreContext } from "@/store/context";
+import { isEmpty } from "@/utils";
 
 const CoffeeStoreDetails = ({
   store,
@@ -31,44 +31,26 @@ const CoffeeStoreDetails = ({
     );
   }
 
-  /*  const data = [
-    {
-      fsq_id: "5c378bf08194fc002cde8d85",
-      categories: [
-        {
-          id: 13035,
-          name: "Coffee Shop",
-          icon: {
-            prefix: "https://ss3.4sqi.net/img/categories_v2/food/coffeeshop_",
-            suffix: ".png",
-          },
-        },
-      ],
-      chains: [],
-      distance: 2061,
-      geocodes: {
-        main: {
-          latitude: 9.067433,
-          longitude: 7.48558,
-        },
-      },
-      link: "/v3/places/5c378bf08194fc002cde8d85",
-      location: {
-        address: "Silverbird Entertainment Centre",
-        country: "NG",
-        cross_street: "",
-        formatted_address:
-          "Silverbird Entertainment Centre, Abuja, Federal Capital Territory",
-        locality: "Abuja",
-        region: "Federal Capital Territory",
-      },
-      name: "Honey",
-      related_places: {},
-      timezone: "Africa/Lagos",
-    },
-  ]; */
+  const { id } = router?.query;
 
-  const { name, distance, location } = store;
+  const [coffeeStore, setCoffeeStore] = useState(store || {});
+
+  const {
+    state: { coffeeStores },
+  } = useStoreContext();
+
+  useEffect(() => {
+    if (isEmpty(store)) {
+      if (coffeeStore?.length > 0) {
+        const store = coffeeStores.find(
+          (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
+        );
+        setCoffeeStore(store);
+      }
+    }
+  }, [id]);
+
+  const { name, distance, location } = coffeeStore;
 
   const handleUpVote = () => {
     console.log("handleUpVote");
@@ -157,7 +139,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      store,
+      store: store ? store : {},
     },
   };
 };
@@ -165,7 +147,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths = async (context: any) => {
   const stores = await fetchCoffeeStores();
 
-  const paths = stores.map((store: CoffeeStoreTypes) => {
+  const paths = stores?.map((store: CoffeeStoreTypes) => {
     return {
       params: {
         id: store.fsq_id.toString(),
