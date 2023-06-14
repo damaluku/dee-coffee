@@ -123,7 +123,7 @@ export default function Home({
           )}
         </div>
 
-        {coffeeStores?.length > 0 ? (
+        {coffeeStores?.length > 0 && (
           <section className={styles.section}>
             <Heading heading="Coffee stores near me" />
 
@@ -138,10 +138,6 @@ export default function Home({
               ))}
             </div>
           </section>
-        ) : (
-          <div className={styles.noStores}>
-            <h3>No stores</h3>
-          </div>
         )}
 
         {stores.length > 0 && (

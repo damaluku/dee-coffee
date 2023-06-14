@@ -12,7 +12,7 @@ const getCoffeeStoresPhotos = async () => {
     orientation: "portrait",
   });
 
-  const unsplashResults: any = photos.response?.results;
+  const unsplashResults: any = photos.response?.results || [];
 
   return unsplashResults.map((result: any) => result.urls["regular"]);
 };
@@ -49,7 +49,7 @@ export const fetchCoffeeStores = async (
 
   try {
     const response = await fetch(
-      getUrlForStores("coffee", latlong, 9),
+      getUrlForStores("coffee", latlong, limit),
       options
     );
 

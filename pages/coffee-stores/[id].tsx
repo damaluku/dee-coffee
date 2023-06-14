@@ -40,11 +40,12 @@ const CoffeeStoreDetails = ({
   } = useStoreContext();
 
   useEffect(() => {
-    if (isEmpty(store)) {
-      if (coffeeStore?.length > 0) {
+    if (!isEmpty(store)) {
+      if (coffeeStores?.length > 0) {
         const store = coffeeStores.find(
           (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
         );
+
         setCoffeeStore(store);
       }
     }
@@ -71,7 +72,7 @@ const CoffeeStoreDetails = ({
         <section className={styles.section2}>
           <div className={styles.imageContainer}>
             <Image
-              src={store.imgUrl || "/static/mesh-gradient.png"}
+              src={coffeeStore.imgUrl || "/static/mesh-gradient.png"}
               fill
               alt={name}
               sizes="(max-width: 768px) 450px, (max-width: 1200px) 450px, 450px"

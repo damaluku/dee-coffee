@@ -19,7 +19,8 @@ const StoreContext = createContext<{
   dispatch: () => null,
 });
 
-export function useStoreContext() {
+// creating the useStore context function
+function useStoreContext() {
   return useContext(StoreContext);
 }
 
@@ -32,7 +33,8 @@ export const ACTION_TYPES = {
   SET_COFFEE_STORES: "SET_COFFEE_STORES",
 };
 
-export const storeReducer = (state: InitialState, action: any) => {
+// creating the store reducer function
+const storeReducer = (state: InitialState, action: any) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -49,6 +51,7 @@ export const storeReducer = (state: InitialState, action: any) => {
   }
 };
 
+// creating the store Provider function
 const StoreProvider = ({ children }: Props) => {
   const [storeState, dispatch] = useReducer(storeReducer, initialState);
 
@@ -59,4 +62,4 @@ const StoreProvider = ({ children }: Props) => {
   );
 };
 
-export { StoreProvider, StoreContext };
+export { StoreProvider, StoreContext, storeReducer, useStoreContext };
