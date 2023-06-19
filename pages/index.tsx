@@ -30,12 +30,6 @@ export type CoffeeStoreTypes = {
   categories: Categories;
   chains: [];
   distance: number;
-  geocodes: {
-    main: {
-      latitude: number;
-      longitude: number;
-    };
-  };
   link: string;
   location: {
     address: string;
@@ -69,18 +63,28 @@ export default function Home({
   const { latlong, coffeeStores } = state;
 
   // const [coffeeStores, setCoffeeStores] = useState<CoffeeStoreTypes[]>([]);
-  const [coffeeStoresError, setCoffeeStoresError] = useState(null);
+  const [coffeeStoresError, setCoffeeStoresError] = useState<string | null>(
+    null
+  );
 
   const handleUpdateLocation = async () => {
     try {
-      const stores = await fetchCoffeeStores(latlong);
+      const response = await fetch(
+        `/api/fetchCoffeeStores?latlong=${latlong}&limit=7`
+      );
+
+      const data = await response.json();
+
+      const coffeeStores = data.stores;
 
       dispatch({
         type: ACTION_TYPES.SET_COFFEE_STORES,
         payload: {
-          coffeeStores: stores,
+          coffeeStores,
         },
       });
+
+      setCoffeeStoresError(null);
     } catch (error: any) {
       console.log(error);
       setCoffeeStoresError(error?.message ? error?.message : error);

@@ -23,14 +23,6 @@ const CoffeeStoreDetails = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
 
-  if (router.isFallback) {
-    return (
-      <div className={styles.loader}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
   const { id } = router?.query;
 
   const [coffeeStore, setCoffeeStore] = useState(store || {});
@@ -39,7 +31,15 @@ const CoffeeStoreDetails = ({
     state: { coffeeStores },
   } = useStoreContext();
 
-  useEffect(() => {
+  if (router.isFallback) {
+    return (
+      <div className={styles.loader}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  const handleCheckIsEmpty = () => {
     if (!isEmpty(store)) {
       if (coffeeStores?.length > 0) {
         const store = coffeeStores.find(
@@ -49,6 +49,10 @@ const CoffeeStoreDetails = ({
         setCoffeeStore(store);
       }
     }
+  };
+
+  useEffect(() => {
+    handleCheckIsEmpty();
   }, [id]);
 
   const { name, distance, location } = coffeeStore;
@@ -63,8 +67,8 @@ const CoffeeStoreDetails = ({
       </Head>
       <div className={styles.container}>
         <section className={styles.section1}>
-          <Link href="/">
-            <BiArrowBack /> Back to home
+          <Link href="/coffee-stores">
+            <BiArrowBack /> All stores
           </Link>
 
           <p>{name}</p>
