@@ -65,3 +65,30 @@ export const fetchCoffeeStores = async (
     console.log(error?.message ? error?.message : error);
   }
 };
+
+/*  imgUrl: string | null;
+  fsq_id: string;
+  categories: Categories;
+  chains: [];
+  distance: number;
+  link: string;
+  location: {
+    address: string;
+    country: string;
+    cross_street: string;
+    formatted_address: string;
+    locality: string;
+    region: string;
+  };
+  related_places: any;
+  timezone: string;
+  id: number;
+  name: string;
+  websiteUrl: string;
+  address: string;
+  neighbourhood: string; */
+
+/*   return {
+        ...result,
+        imgUrl: photos.length > 0 ? photos[index] : null,
+      }; */
