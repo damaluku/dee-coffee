@@ -36,8 +36,6 @@ export default CoffeeStores;
 export const getStaticProps: GetStaticProps = async (context) => {
   const stores = await fetchCoffeeStores();
 
-  console.log(stores);
-
   if (!stores) {
     return {
       notFound: true,

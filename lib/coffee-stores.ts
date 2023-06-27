@@ -8,7 +8,7 @@ const getCoffeeStoresPhotos = async () => {
   const photos = await unsplash.search.getPhotos({
     query: "coffee shop",
     page: 1,
-    perPage: 9,
+    perPage: 5,
     orientation: "portrait",
   });
 
@@ -27,7 +27,7 @@ export const getUrlForStores = (
 
 export const fetchCoffeeStores = async (
   latlong: string = "9.053844%2C7.468849",
-  limit: string | number = 6
+  limit: string | number = 4
 ) => {
   const photos = await getCoffeeStoresPhotos();
   interface Options {
@@ -56,8 +56,22 @@ export const fetchCoffeeStores = async (
     const data = await response.json();
 
     return data?.results.map((result: any, index: number) => {
+      // console.log(result);
       return {
-        ...result,
+        fsq_id: result.fsq_id,
+        name: result.name,
+        address: result?.location.address ? result?.location.address : null,
+        neighbourhood: result?.neighbourhood ? result?.neighbourhood : null,
+        cross_street: result?.location.cross_street
+          ? result?.location.cross_street
+          : null,
+        locality: result?.location.locality ? result?.location.locality : null,
+        formatted_address: result?.location.formatted_address
+          ? result?.location.formatted_address
+          : null,
+        distance: result.distance,
+
+        voting: 0,
         imgUrl: photos.length > 0 ? photos[index] : null,
       };
     });
@@ -65,6 +79,17 @@ export const fetchCoffeeStores = async (
     console.log(error?.message ? error?.message : error);
   }
 };
+
+/*  fsq_id: string;
+        name: string;
+       address: string;
+       neighbourhood: string; 
+        voting: number,
+       imgUrl: string | null;
+        cross_street: string;
+        locality: string;
+         formatted_address: string;
+         distance: number; */
 
 /*  imgUrl: string | null;
   fsq_id: string;

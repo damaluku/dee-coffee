@@ -58,32 +58,31 @@
   flex: 1;
   align-self: flex-start;
   padding: 1.5rem 1rem;
-
   background: rgba(255, 255, 255, 0.45);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(7.5px);
   -webkit-backdrop-filter: blur(7.5px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .infoContainer p {
   color: var(--color-dark);
   font-size: 1.5rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .infoContainer p span {
   margin-right: 0.5rem;
+  font-weight: bold;
 }
 
 .infoContainer p:nth-child(2) {
   margin: 1rem 0;
-}
-
-.infoContainer p:nth-child(3) span {
-  font-weight: bold;
 }
 
 .infoContainer button {
@@ -96,7 +95,7 @@
   cursor: pointer;
   background-color: var(--color-main);
   color: var(--color-light);
-  transition: 0.2s all ease-in-out;
+  transition: 0.3s all ease-in-out;
 }
 
 .infoContainer button:hover {
@@ -105,8 +104,8 @@
 }
 
 .infoContainer button:active {
-  color: var(--color-main);
-  border: 1px dotted var(--color-main);
+  color: var(--color-light);
+  background-color: var(--color-dark);
 }
 
 /* media query */

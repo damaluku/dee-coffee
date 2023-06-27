@@ -25,6 +25,18 @@ interface Categories {
 }
 
 export type CoffeeStoreTypes = {
+  fsq_id: string;
+  name: string;
+  address: string;
+  neighbourhood: string;
+  voting: number;
+  imgUrl: string | null;
+  cross_street: string;
+  locality: string;
+  formatted_address: string;
+  distance: number;
+};
+/* export type CoffeeStoreTypes = {
   imgUrl: string | null;
   fsq_id: string;
   categories: Categories;
@@ -46,7 +58,7 @@ export type CoffeeStoreTypes = {
   websiteUrl: string;
   address: string;
   neighbourhood: string;
-};
+}; */
 
 export default function Home({
   stores,
@@ -70,7 +82,7 @@ export default function Home({
   const handleUpdateLocation = async () => {
     try {
       const response = await fetch(
-        `/api/fetchCoffeeStores?latlong=${latlong}&limit=7`
+        `/api/fetchCoffeeStores?latlong=${latlong}&limit=5`
       );
 
       const data = await response.json();

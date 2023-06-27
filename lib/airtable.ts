@@ -1,3 +1,5 @@
+import { CoffeeStoreTypes } from "@/pages";
+
 const Airtable = require("airtable");
 
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_TOKEN }).base(
@@ -13,7 +15,7 @@ const getMinifiedRecord = (record: any) => {
 };
 
 const getMinifiedRecords = (records: any) => {
-  return records.map((record: any) => getMinifiedRecord(record));
+  return records.map((record: CoffeeStoreTypes) => getMinifiedRecord(record));
 };
 
 export { getMinifiedRecords, table };

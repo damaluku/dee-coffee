@@ -10,6 +10,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import { MdLocationPin } from "react-icons/md";
+import { MdStar } from "react-icons/md";
 import { FaLocationArrow } from "react-icons/fa";
 import { BiArrowBack } from "react-icons/bi";
 
@@ -25,40 +26,98 @@ const CoffeeStoreDetails = ({
 
   const { id } = router?.query;
 
-  const [coffeeStore, setCoffeeStore] = useState(store || {});
+  const [coffeeStore, setCoffeeStore] = useState<CoffeeStoreTypes>(store || {});
+  const [votingCount, setVotingCount] = useState<number>(1);
+
+  // if (router.isFallback) {
+  //   return (
+  //     <div className={styles.loader}>
+  //       <p>Loading...</p>
+  //     </div>
+  //   );
+  // }
 
   const {
     state: { coffeeStores },
   } = useStoreContext();
 
-  if (router.isFallback) {
-    return (
-      <div className={styles.loader}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const handleCreateCoffeeStore = async (coffeeStore: CoffeeStoreTypes) => {
+    try {
+      const {
+        fsq_id,
+        name,
+        address,
+        neighbourhood,
+        voting,
+        imgUrl,
+        cross_street,
+        locality,
+        formatted_address,
+        distance,
+      } = coffeeStore;
+
+      const response = await fetch("/api/createCoffeeStore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: fsq_id,
+          name,
+          address,
+          neighbourhood,
+          voting,
+          imgUrl,
+          cross_street,
+          locality,
+          formatted_address,
+          distance,
+        }),
+      });
+
+      const dbCoffeeStore = await response.json();
+
+      // console.log(dbCoffeeStore);
+    } catch (error) {
+      console.log("Error creating coffee store", error);
+    }
+  };
 
   const handleCheckIsEmpty = () => {
-    if (!isEmpty(store)) {
+    if (isEmpty(store)) {
       if (coffeeStores?.length > 0) {
-        const store = coffeeStores.find(
+        const coffeeStoreFromContext = coffeeStores.find(
           (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
         );
 
-        setCoffeeStore(store);
+        if (coffeeStoreFromContext) {
+          setCoffeeStore(coffeeStoreFromContext);
+          handleCreateCoffeeStore(coffeeStoreFromContext);
+        }
       }
+    } else {
+      handleCreateCoffeeStore(store);
     }
   };
 
   useEffect(() => {
     handleCheckIsEmpty();
-  }, [id]);
+  }, [id, store]);
 
-  const { name, distance, location } = coffeeStore;
+  const {
+    name,
+    distance,
+    imgUrl,
+    address,
+    formatted_address,
+    cross_street,
+    locality,
+  } = coffeeStore;
 
   const handleUpVote = () => {
     console.log("handleUpVote");
+    let count = votingCount + 1;
+    setVotingCount(count);
   };
   return (
     <>
@@ -71,36 +130,38 @@ const CoffeeStoreDetails = ({
             <BiArrowBack /> All stores
           </Link>
 
+          <Link href="/">
+            <BiArrowBack /> Home
+          </Link>
+
           <p>{name}</p>
         </section>
         <section className={styles.section2}>
           <div className={styles.imageContainer}>
             <Image
-              src={coffeeStore.imgUrl || "/static/mesh-gradient.png"}
+              src={imgUrl || "/static/mesh-gradient.png"}
               fill
-              alt={name}
+              alt={name ? name : "store image"}
               sizes="(max-width: 768px) 450px, (max-width: 1200px) 450px, 450px"
             />
           </div>
 
           <div className={styles.infoContainer}>
-            {location.address && (
+            {(address || formatted_address) && (
               <p>
                 <span>
                   <MdLocationPin />
                 </span>
-                {location.address || location.formatted_address}
+                {address ? address : formatted_address}
               </p>
             )}
 
-            {location.cross_street && (
+            {(cross_street || locality) && (
               <p>
                 <span>
                   <FaLocationArrow />
                 </span>
-                {location.cross_street
-                  ? location.cross_street
-                  : location.locality}
+                {cross_street ? cross_street : locality}
               </p>
             )}
 
@@ -110,6 +171,14 @@ const CoffeeStoreDetails = ({
                 {distance}
               </p>
             )}
+
+            <p>
+              <span>
+                {/* <MdStar /> */}
+                Votes:
+              </span>
+              {votingCount}
+            </p>
 
             <button onClick={handleUpVote}>up vote</button>
           </div>
@@ -126,21 +195,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const stores = await fetchCoffeeStores();
 
-  if (!stores) {
-    return {
-      notFound: true,
-    };
-  }
+  // if (!stores) {
+  //   return {
+  //     notFound: true,
+  //   };
+  // }
 
   const store = stores.find(
     (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
   );
-
-  if (!store) {
-    return {
-      notFound: true,
-    };
-  }
 
   return {
     props: {

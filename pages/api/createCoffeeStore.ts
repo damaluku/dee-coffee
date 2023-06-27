@@ -29,7 +29,7 @@ export default async function handler(
       if (id) {
         const findCoffeeStoreRecord = await table
           .select({
-            filterByFormula: `id=${id}`,
+            filterByFormula: `id="${id}"`,
           })
           .firstPage();
 
@@ -44,14 +44,14 @@ export default async function handler(
                 fields: {
                   id,
                   name,
-                  address,
-                  neighbourhood,
-                  voting,
+                  address: address ? address : "",
+                  neighbourhood: neighbourhood ? neighbourhood : "",
+                  voting: voting ? voting : 0,
                   imgUrl,
-                  cross_street,
-                  locality,
-                  formatted_address,
-                  distance,
+                  cross_street: cross_street ? cross_street : "",
+                  locality: locality ? locality : "",
+                  formatted_address: formatted_address ? formatted_address : "",
+                  distance: distance ? distance : 0,
                 },
               },
             ]);
