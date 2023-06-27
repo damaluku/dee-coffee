@@ -31,6 +31,7 @@ const CoffeeStoreDetails = ({
 
   const [coffeeStore, setCoffeeStore] = useState<CoffeeStoreTypes>(store || {});
   const [votingCount, setVotingCount] = useState<number>(1);
+  const [isVoting, setIsVoting] = useState<boolean>(false);
 
   const {
     state: { coffeeStores },
@@ -39,6 +40,7 @@ const CoffeeStoreDetails = ({
   const { data: SwrData, error: SwrError } = useSWR(
     `/api/getCoffeeStoreByid?id=${id}`,
     fetcher
+    // { refreshInterval: 1000 }
   );
 
   const handleSetSWRData = () => {
@@ -141,10 +143,28 @@ const CoffeeStoreDetails = ({
     locality,
   } = coffeeStore;
 
-  const handleUpVote = () => {
-    console.log("handleUpVote");
-    let count = votingCount + 1;
-    setVotingCount(count);
+  const handleUpVote = async () => {
+    try {
+      setIsVoting(true);
+
+      const response = await fetch("/api/upVoteByid", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      const dbCoffeeStore = await response.json();
+
+      if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+        let count = votingCount + 1;
+        setVotingCount(count);
+      }
+
+      setIsVoting(false);
+    } catch (error) {
+      console.log("Error upvoting store", error);
+      setIsVoting(false);
+    }
   };
   return (
     <>
@@ -204,7 +224,7 @@ const CoffeeStoreDetails = ({
                 {/* <MdStar /> */}
                 Votes:
               </span>
-              {votingCount}
+              {isVoting ? <i>voting...</i> : votingCount}
             </p>
 
             <button onClick={handleUpVote}>up vote</button>

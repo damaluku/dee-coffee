@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { findRecordByFilter, getMinifiedRecords, table } from "@/lib/airtable";
+import { findRecordByFilter } from "@/lib/airtable";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CoffeeStoreTypes } from "..";
 

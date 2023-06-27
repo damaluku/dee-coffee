@@ -10,6 +10,7 @@ const table = base("coffee-stores");
 
 const getMinifiedRecord = (record: any) => {
   return {
+    recordId: record.id,
     ...record.fields,
   };
 };

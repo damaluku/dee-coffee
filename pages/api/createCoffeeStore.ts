@@ -1,15 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { findRecordByFilter, getMinifiedRecords, table } from "@/lib/airtable";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { CoffeeStoreTypes } from "..";
 
-/* type Data = {
-  table: any;
-  message: string;
-}; */
+type Data = {
+  records?: CoffeeStoreTypes[];
+  message?: string;
+  error?: any;
+};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
     const {
