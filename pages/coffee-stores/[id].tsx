@@ -19,6 +19,9 @@ import { fetchCoffeeStores } from "@/lib/coffee-stores";
 import { useStoreContext } from "@/store/context";
 import { isEmpty } from "@/utils";
 
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
+
 const CoffeeStoreDetails = ({
   store,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -29,6 +32,26 @@ const CoffeeStoreDetails = ({
   const [coffeeStore, setCoffeeStore] = useState<CoffeeStoreTypes>(store || {});
   const [votingCount, setVotingCount] = useState<number>(1);
 
+  const {
+    state: { coffeeStores },
+  } = useStoreContext();
+
+  const { data: SwrData, error: SwrError } = useSWR(
+    `/api/getCoffeeStoreByid?id=${id}`,
+    fetcher
+  );
+
+  const handleSetSWRData = () => {
+    if (SwrData && SwrData.length > 0) {
+      setCoffeeStore(SwrData[0]);
+      setVotingCount(SwrData[0]?.voting);
+    }
+  };
+
+  useEffect(() => {
+    handleSetSWRData();
+  }, [SwrData]);
+
   // if (router.isFallback) {
   //   return (
   //     <div className={styles.loader}>
@@ -36,10 +59,6 @@ const CoffeeStoreDetails = ({
   //     </div>
   //   );
   // }
-
-  const {
-    state: { coffeeStores },
-  } = useStoreContext();
 
   const handleCreateCoffeeStore = async (coffeeStore: CoffeeStoreTypes) => {
     try {
@@ -83,7 +102,7 @@ const CoffeeStoreDetails = ({
     }
   };
 
-  const handleCheckIsEmpty = () => {
+  const handleCheckIsEmpty = async () => {
     if (isEmpty(store)) {
       if (coffeeStores?.length > 0) {
         const coffeeStoreFromContext = coffeeStores.find(
@@ -103,6 +122,14 @@ const CoffeeStoreDetails = ({
   useEffect(() => {
     handleCheckIsEmpty();
   }, [id, store]);
+
+  if (SwrError) {
+    return (
+      <div className={styles.loader}>
+        <p>Somthing went wrong retrieving store page.</p>
+      </div>
+    );
+  }
 
   const {
     name,
