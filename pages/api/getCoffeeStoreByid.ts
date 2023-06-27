@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getMinifiedRecords, table } from "@/lib/airtable";
+import { findRecordByFilter, getMinifiedRecords, table } from "@/lib/airtable";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CoffeeStoreTypes } from "..";
 
@@ -17,16 +17,10 @@ export default async function handler(
 
   if (id) {
     try {
-      const findCoffeeStoreRecord = await table
-        .select({
-          filterByFormula: `id="${id}"`,
-        })
-        .firstPage();
+      const records = await findRecordByFilter(id);
 
-      if (findCoffeeStoreRecord.length !== 0) {
-        const records = getMinifiedRecords(findCoffeeStoreRecord);
-
-        res.status(200).json(records.length ? records[0] : records);
+      if (records.length !== 0) {
+        res.status(200).json(records);
       } else {
         res.status(404).json({ message: "No records found" });
       }
