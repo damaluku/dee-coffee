@@ -59,27 +59,23 @@ export const fetchCoffeeStores = async (
     const data = await response.json();
 
     return data?.results.map((result: any, index: number) => {
-      if (result !== undefined) {
-        return {
-          fsq_id: result.fsq_id,
-          name: result.name,
-          address: result?.location.address ? result?.location.address : null,
-          neighbourhood: result?.neighbourhood ? result?.neighbourhood : null,
-          cross_street: result?.location.cross_street
-            ? result?.location.cross_street
-            : null,
-          locality: result?.location.locality
-            ? result?.location.locality
-            : null,
-          formatted_address: result?.location.formatted_address
-            ? result?.location.formatted_address
-            : null,
-          distance: result.distance,
+      return {
+        fsq_id: result.fsq_id,
+        name: result.name,
+        address: result?.location.address ? result?.location.address : null,
+        neighbourhood: result?.neighbourhood ? result?.neighbourhood : null,
+        cross_street: result?.location.cross_street
+          ? result?.location.cross_street
+          : null,
+        locality: result?.location.locality ? result?.location.locality : null,
+        formatted_address: result?.location.formatted_address
+          ? result?.location.formatted_address
+          : null,
+        distance: result.distance,
 
-          voting: 0,
-          imgUrl: photos.length > 0 ? photos[index] : null,
-        };
-      } else return {};
+        voting: 0,
+        imgUrl: photos.length > 0 ? photos[index] : null,
+      };
     });
   } catch (error: any) {
     console.log(error?.message ? error?.message : error);
