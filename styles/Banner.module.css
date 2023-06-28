@@ -5,6 +5,7 @@
   gap: 1rem;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 3rem;
 }
 
 .subContainer {
@@ -46,6 +47,7 @@
 .subtitle {
   line-height: 1.5rem;
   margin: 1.5rem 0;
+  font-size: x-large;
 }
 
 .button {

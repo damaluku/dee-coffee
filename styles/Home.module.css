@@ -2,11 +2,6 @@
   min-height: 100vh;
 }
 
-.section {
-  margin-top: 8rem;
-  /* width: 100%; */
-}
-
 .section h2 {
   color: var(--color-light);
   font-size: 3rem;
@@ -17,7 +12,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   justify-content: center;
-  align-items: center;
+  align-items: first baseline;
   row-gap: 2rem;
 }
 

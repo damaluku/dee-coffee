@@ -1,3 +1,9 @@
+.cardCover {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .container {
   width: 300px;
   height: 100%;
@@ -9,11 +15,9 @@
   width: 300px;
   height: 350px;
   position: relative;
-  padding: 0.5rem;
 }
 
 .content {
-  /* border-top: 5px solid var(--color-main); */
   padding: 1.5rem 1rem;
 }
 
