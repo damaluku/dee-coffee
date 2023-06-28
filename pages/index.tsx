@@ -149,15 +149,15 @@ export default function Home({
 export const getStaticProps: GetStaticProps = async (context) => {
   const stores = await fetchCoffeeStores();
 
-  if (!stores) {
+  if (stores && stores.length > 0) {
+    return {
+      props: {
+        stores,
+      },
+    };
+  } else {
     return {
       notFound: true,
     };
   }
-
-  return {
-    props: {
-      stores,
-    },
-  };
 };
