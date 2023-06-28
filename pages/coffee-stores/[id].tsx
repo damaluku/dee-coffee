@@ -275,8 +275,12 @@ export const getStaticPaths = async (context: any) => {
     };
   });
 
-  return {
+  /*  return {
     paths,
+    fallback: true,
+  }; */
+  return {
+    paths: [{ params: { id: "4f831a6ce4b0c7b857a99ee5" } }],
     fallback: true,
   };
 };
