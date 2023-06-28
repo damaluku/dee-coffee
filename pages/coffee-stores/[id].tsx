@@ -267,10 +267,17 @@ export const getStaticPaths = async (context: any) => {
   //   };
   // }
 
-  const paths = await stores?.map((store: CoffeeStoreTypes) => {
+  /*  const paths = stores?.map((store: CoffeeStoreTypes) => {
     return {
       params: {
-        id: store.fsq_id ? store?.fsq_id.toString() : "",
+        id: store ? store?.fsq_id.toString() : "",
+      },
+    };
+  }); */
+  const paths = stores?.map((store: CoffeeStoreTypes) => {
+    return {
+      params: {
+        id: "1",
       },
     };
   });
