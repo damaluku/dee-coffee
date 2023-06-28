@@ -268,6 +268,7 @@ export const getStaticPaths = async (context: any) => {
       },
     };
   });
+
   return {
     paths,
     fallback: true,
