@@ -79,7 +79,7 @@ export const fetchCoffeeStores = async (
           voting: 0,
           imgUrl: photos.length > 0 ? photos[index] : null,
         };
-      } else return [];
+      } else return {};
     });
   } catch (error: any) {
     console.log(error?.message ? error?.message : error);
