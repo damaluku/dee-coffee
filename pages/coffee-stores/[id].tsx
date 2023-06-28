@@ -276,7 +276,8 @@ export const getStaticPaths = async (context: any) => {
     };
   } else {
     return {
-      notFound: true,
+      paths: [],
+      fallback: false,
     };
   }
 };
