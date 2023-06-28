@@ -261,22 +261,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths = async (context: any) => {
   const stores = await fetchCoffeeStores();
 
-  if (stores) {
-    const paths = await stores?.map((store: CoffeeStoreTypes) => {
-      return {
-        params: {
-          id: store.fsq_id.toString(),
-        },
-      };
-    });
-
-    return {
-      paths,
-      fallback: true,
-    };
-  } else {
+  if (!stores) {
     return {
       notFound: true,
     };
   }
+
+  const paths = await stores?.map((store: CoffeeStoreTypes) => {
+    return {
+      params: {
+        id: store.fsq_id.toString(),
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: true,
+  };
 };
