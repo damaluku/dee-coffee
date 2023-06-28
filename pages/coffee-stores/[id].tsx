@@ -30,7 +30,7 @@ const CoffeeStoreDetails = ({
   const { id } = router?.query;
 
   const [coffeeStore, setCoffeeStore] = useState<CoffeeStoreTypes>(store || {});
-  const [votingCount, setVotingCount] = useState<number>(1);
+  const [votingCount, setVotingCount] = useState<number>(0);
   const [isVoting, setIsVoting] = useState<boolean>(false);
 
   const {
@@ -97,8 +97,6 @@ const CoffeeStoreDetails = ({
       });
 
       const dbCoffeeStore = await response.json();
-
-      // console.log(dbCoffeeStore);
     } catch (error) {
       console.log("Error creating coffee store", error);
     }
@@ -187,8 +185,9 @@ const CoffeeStoreDetails = ({
           <div className={styles.imageContainer}>
             <Image
               src={imgUrl || "/static/mesh-gradient.png"}
-              fill
               alt={name ? name : "store image"}
+              fill
+              priority
               sizes="(max-width: 768px) 450px, (max-width: 1200px) 450px, 450px"
             />
           </div>

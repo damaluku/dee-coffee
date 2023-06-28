@@ -5,16 +5,20 @@ const unsplash = createApi({
 });
 
 const getCoffeeStoresPhotos = async () => {
-  const photos = await unsplash.search.getPhotos({
-    query: "coffee shop",
-    page: 1,
-    perPage: 5,
-    orientation: "portrait",
-  });
+  try {
+    const photos = await unsplash?.search?.getPhotos({
+      query: "coffee shop",
+      page: 1,
+      perPage: 5,
+      orientation: "portrait",
+    });
 
-  const unsplashResults: any = photos.response?.results || [];
+    const unsplashResults: any = photos.response?.results || [];
 
-  return unsplashResults.map((result: any) => result.urls["regular"]);
+    return unsplashResults.map((result: any) => result.urls["regular"]);
+  } catch (error) {
+    console.error("Error originating from unsplash", error);
+  }
 };
 
 export const getUrlForStores = (
@@ -45,7 +49,6 @@ export const fetchCoffeeStores = async (
       Authorization: process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY,
     },
   };
-  //https:api.foursquare.com/v3/places/search?query=coffee&ll=9.053844%2C7.468849&limit=21
 
   try {
     const response = await fetch(
@@ -56,7 +59,6 @@ export const fetchCoffeeStores = async (
     const data = await response.json();
 
     return data?.results.map((result: any, index: number) => {
-      // console.log(result);
       return {
         fsq_id: result.fsq_id,
         name: result.name,
@@ -112,8 +114,3 @@ export const fetchCoffeeStores = async (
   websiteUrl: string;
   address: string;
   neighbourhood: string; */
-
-/*   return {
-        ...result,
-        imgUrl: photos.length > 0 ? photos[index] : null,
-      }; */
