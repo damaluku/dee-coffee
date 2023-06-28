@@ -241,15 +241,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const stores = await fetchCoffeeStores();
 
-  // if (!stores) {
+  const store = stores.find(
+    (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
+  );
+
+  // if (!store) {
   //   return {
   //     notFound: true,
   //   };
   // }
-
-  const store = stores.find(
-    (store: CoffeeStoreTypes) => store.fsq_id.toString() === id
-  );
 
   return {
     props: {
